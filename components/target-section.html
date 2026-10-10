@@ -1,13 +1,26 @@
 <section class="target-hours" aria-labelledby="target-hours-title">
   <div class="section-heading">
     <h2 id="target-hours-title">Target hours</h2>
+    <button
+        id="edit-target-button"
+        class="edit-target-button"
+        type="button"
+        aria-label="Edit weekly target"
+      >
+        Edit hours
+      </button>
   </div>
 
   <div id="target-card" class="target-card">
-    <div>
-      <p class="target-label">Weekly goal</p>
-      <strong id="target-hours-value" class="target-value"></strong>
+    <div class="target-card-main">
+      <div>
+        <p class="target-label">Weekly goal</p>
+        <strong id="target-hours-value" class="target-value"></strong>
+      </div>
+
+      
     </div>
+
     <div class="target-progress">
       <span id="target-progress-label">6 / 10 hrs</span>
       <div class="progress-bar" aria-hidden="true">

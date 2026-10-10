@@ -1,10 +1,22 @@
 (function () {
 
-  function renderTarget(targetHours) {
+  function formatDurationLabel(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+
+    return `${minutes}m`;
+  }
+
+  function renderTarget(targetHours, trackedSeconds = 0) {
     const targetCard = document.getElementById("target-card");
     const targetEmptyState = document.getElementById("target-empty-state");
     const targetHoursValue = document.getElementById("target-hours-value");
     const targetProgressLabel = document.getElementById("target-progress-label");
+    const progressFill = document.querySelector(".progress-fill");
 
     if (
       !targetCard ||
@@ -26,17 +38,28 @@
     targetCard.classList.remove("hidden");
     targetEmptyState.classList.add("hidden");
 
+    const seconds = Math.max(0, Number(trackedSeconds) || 0);
+    const targetSeconds = hours * 3600;
+    const percent = Math.min((seconds / targetSeconds) * 100, 100);
+
     targetHoursValue.textContent =
       `${hours} hour${hours === 1 ? "" : "s"}`;
 
     targetProgressLabel.textContent =
-      `0 / ${hours} hrs`;
+      `${formatDurationLabel(seconds)} / ${hours} hrs`;
+
+    if (progressFill) {
+      progressFill.style.width = `${percent}%`;
+    }
   }
 
   function initTargetSection() {
 
     const setTargetButton =
       document.getElementById("set-target-button");
+
+    const editTargetButton =
+      document.getElementById("edit-target-button");
 
     const targetModal =
       document.getElementById("target-modal");
@@ -82,6 +105,7 @@
 
     if (
       !setTargetButton ||
+      !editTargetButton ||
       !targetModal ||
       !prevTargetButton ||
       !nextTargetButton ||
@@ -170,10 +194,10 @@
       }
     }
 
-    function openModal() {
+    function openModal(goToTargetSlide = false) {
       targetModal.classList.remove("hidden");
 
-      currentSlide = 0;
+      currentSlide = goToTargetSlide ? slides.length - 1 : 0;
       updateCarousel();
     }
 
@@ -203,7 +227,12 @@
 
     setTargetButton.addEventListener(
       "click",
-      openModal
+      () => openModal(false)
+    );
+
+    editTargetButton.addEventListener(
+      "click",
+      () => openModal(true)
     );
 
     cancelTargetButton.addEventListener(
@@ -229,27 +258,45 @@
     );
 
     async function syncTargetHours() {
+      const result = await window.BrainFmStorage.get([
+        "weeklyTargetHours",
+        "weeklyProgressSeconds",
+        "weeklyProgressWeekStart"
+      ]);
 
-      const result =
-        await window.BrainFmStorage.get([
-          "weeklyTargetHours"
-        ]);
+      const savedHours = Number(result.weeklyTargetHours);
+      const progressSeconds = Number(result.weeklyProgressSeconds) || 0;
+      const weekStart = result.weeklyProgressWeekStart;
+      const currentWeekKey = new Date();
+      const day = currentWeekKey.getDay();
+      const mondayOffset = day === 0 ? -6 : 1 - day;
+      currentWeekKey.setHours(0, 0, 0, 0);
+      currentWeekKey.setDate(currentWeekKey.getDate() + mondayOffset);
+      const expectedWeekKey = currentWeekKey.toISOString().slice(0, 10);
 
-      const savedHours =
-        Number(result.weeklyTargetHours);
-
-      if (
-        Number.isFinite(savedHours) &&
-        savedHours > 0
-      ) {
-        targetHoursInput.value =
-          String(savedHours);
+      if (weekStart !== expectedWeekKey && Number.isFinite(savedHours) && savedHours > 0) {
+        await window.BrainFmStorage.set({
+          weeklyProgressSeconds: 0,
+          weeklyProgressWeekStart: expectedWeekKey
+        });
       }
 
+      if (Number.isFinite(savedHours) && savedHours > 0) {
+        targetHoursInput.value = String(savedHours);
+      }
+
+      const weeklySeconds = Number((await window.BrainFmStorage.get(["weeklyProgressSeconds"])).weeklyProgressSeconds) || 0;
+
       updateTargetResult();
-      renderTarget(
-        result.weeklyTargetHours
-      );
+      renderTarget(savedHours || 0, weeklySeconds);
+    }
+
+    if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.onChanged) {
+      chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === "local" && (changes.weeklyTargetHours || changes.weeklyProgressSeconds || changes.weeklyProgressWeekStart)) {
+          syncTargetHours();
+        }
+      });
     }
 
     syncTargetHours();

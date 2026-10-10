@@ -3,6 +3,18 @@ let trackedTabId = null;
 let trackedWebsites = ["brain.fm"];
 let trackedWebsite = "brain.fm";
 
+function getCurrentWeekKey() {
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  const day = startOfWeek.getDay();
+  const diff = (day === 0 ? -6 : 1 - day);
+
+  startOfWeek.setHours(0, 0, 0, 0);
+  startOfWeek.setDate(startOfWeek.getDate() + diff);
+
+  return startOfWeek.toISOString().slice(0, 10);
+}
+
 const websiteReady = new Promise((resolve) => {
   chrome.storage.local.get(["trackedWebsites", "trackedWebsite"], (result) => {
     const savedWebsites = Array.isArray(result.trackedWebsites) && result.trackedWebsites.length
@@ -63,13 +75,17 @@ function stopTimer() {
     (Date.now() - startTime) / 1000
   );
 
-  chrome.storage.local.get(["totalTime"], (result) => {
-    const oldTime = result.totalTime || 0;
-
-    const newTime = oldTime + elapsedSeconds;
+  chrome.storage.local.get(["totalTime", "weeklyProgressSeconds", "weeklyProgressWeekStart"], (result) => {
+    const oldTime = Number(result.totalTime) || 0;
+    const weekKey = getCurrentWeekKey();
+    const currentWeek = result.weeklyProgressWeekStart || weekKey;
+    const oldWeeklyTime = Number(result.weeklyProgressSeconds) || 0;
+    const nextWeeklyTime = currentWeek === weekKey ? oldWeeklyTime + elapsedSeconds : elapsedSeconds;
 
     chrome.storage.local.set({
-      totalTime: newTime
+      totalTime: oldTime + elapsedSeconds,
+      weeklyProgressSeconds: nextWeeklyTime,
+      weeklyProgressWeekStart: weekKey
     });
   });
 
