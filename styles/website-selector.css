@@ -61,15 +61,55 @@
   background: #f8f7fc;
 }
 
+.selection-content {
+  min-width: 0;
+  flex: 1;
+}
+
 .selection-label {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-size: 14px;
 }
 
-#current-website {
-  display: block;
-  font-size: 18px;
-  overflow-wrap: anywhere;
+.selected-websites {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.website-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #f0eaff;
+  color: #2a2140;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.website-pill button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.website-pill .remove-site {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(112, 65, 200, 0.12);
+  color: #4d3b78;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .selection a {

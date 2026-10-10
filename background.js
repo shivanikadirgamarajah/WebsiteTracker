@@ -1,10 +1,16 @@
 let startTime = null;
 let trackedTabId = null;
+let trackedWebsites = ["brain.fm"];
 let trackedWebsite = "brain.fm";
 
 const websiteReady = new Promise((resolve) => {
-  chrome.storage.local.get(["trackedWebsite"], (result) => {
-    trackedWebsite = result.trackedWebsite || "brain.fm";
+  chrome.storage.local.get(["trackedWebsites", "trackedWebsite"], (result) => {
+    const savedWebsites = Array.isArray(result.trackedWebsites) && result.trackedWebsites.length
+      ? result.trackedWebsites
+      : (result.trackedWebsite ? [result.trackedWebsite] : ["brain.fm"]);
+
+    trackedWebsites = savedWebsites.map((site) => typeof site === "string" ? site : (site.hostname || "brain.fm"));
+    trackedWebsite = trackedWebsites[0] || "brain.fm";
     resolve();
     findPlayingTab();
   });
@@ -14,9 +20,11 @@ function matchesWebsite(address) {
   try {
     const url = new URL(address);
     const hostname = url.hostname.toLowerCase().replace(/\.$/, "");
-    return ["http:", "https:"].includes(url.protocol) && (
-      hostname === trackedWebsite || hostname.endsWith(`.${trackedWebsite}`)
-    );
+
+    return ["http:", "https:"].includes(url.protocol) && trackedWebsites.some((site) => {
+      const normalizedSite = String(site || "").toLowerCase().replace(/^www\./, "");
+      return hostname === normalizedSite || hostname.endsWith(`.${normalizedSite}`);
+    });
   } catch {
     return false;
   }
@@ -80,10 +88,19 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === "local" && changes.trackedWebsite) {
+  if (area !== "local") {
+    return;
+  }
+
+  if (changes.trackedWebsites || changes.trackedWebsite) {
     websiteReady.then(() => {
       stopTimer();
-      trackedWebsite = changes.trackedWebsite.newValue || "brain.fm";
+      const savedWebsites = changes.trackedWebsites && Array.isArray(changes.trackedWebsites.newValue)
+        ? changes.trackedWebsites.newValue
+        : (changes.trackedWebsite && changes.trackedWebsite.newValue ? [changes.trackedWebsite.newValue] : ["brain.fm"]);
+
+      trackedWebsites = savedWebsites.map((site) => typeof site === "string" ? site : (site.hostname || "brain.fm"));
+      trackedWebsite = trackedWebsites[0] || "brain.fm";
       findPlayingTab();
     });
   }

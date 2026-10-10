@@ -30,16 +30,77 @@
     };
   }
 
-  function setWebsiteDisplay(hostname, address = `https://${hostname}`) {
-    const currentWebsite = document.getElementById("current-website");
+  function getTrackedWebsites(result = {}) {
+    const savedWebsites = Array.isArray(result.trackedWebsites) ? result.trackedWebsites : [];
+
+    if (savedWebsites.length > 0) {
+      return savedWebsites.filter((site) => site && (site.hostname || site)).map((site) => ({
+        hostname: typeof site === "string" ? site : (site.hostname || "").toLowerCase(),
+        address: typeof site === "string" ? `https://${site}` : (site.address || `https://${site.hostname}`)
+      })).filter((site) => site.hostname);
+    }
+
+    const legacyHostname = result.trackedWebsite;
+    if (legacyHostname) {
+      return [{
+        hostname: String(legacyHostname).toLowerCase(),
+        address: result.trackedWebsiteUrl || `https://${legacyHostname}`
+      }];
+    }
+
+    return [{
+      hostname: "brain.fm",
+      address: "https://brain.fm"
+    }];
+  }
+
+  function setWebsiteDisplay(websites) {
+    const selectedWebsites = document.getElementById("selected-websites");
     const openWebsite = document.getElementById("open-website");
 
-    if (!currentWebsite || !openWebsite) {
+    if (!selectedWebsites || !openWebsite) {
       return;
     }
 
-    currentWebsite.textContent = hostname;
-    openWebsite.href = address;
+    const safeWebsites = (websites || []).filter(Boolean);
+    const firstWebsite = safeWebsites[0] || { hostname: "brain.fm", address: "https://brain.fm" };
+
+    selectedWebsites.innerHTML = safeWebsites.length
+      ? safeWebsites.map((site) => `
+          <span class="website-pill">
+            ${site.hostname}
+            <button class="remove-site" type="button" data-remove-website="${site.hostname}" aria-label="Remove ${site.hostname}">×</button>
+          </span>
+        `).join("")
+      : '<span class="website-pill">brain.fm</span>';
+
+    openWebsite.href = firstWebsite.address || `https://${firstWebsite.hostname}`;
+
+    selectedWebsites.querySelectorAll("[data-remove-website]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const hostnameToRemove = button.getAttribute("data-remove-website");
+        const existing = await window.BrainFmStorage.get(["trackedWebsites", "trackedWebsite"]);
+        const websitesList = getTrackedWebsites(existing);
+        const nextWebsites = websitesList.filter((site) => site.hostname !== hostnameToRemove);
+
+        if (nextWebsites.length === 0) {
+          await window.BrainFmStorage.set({
+            trackedWebsites: [],
+            trackedWebsite: "brain.fm",
+            trackedWebsiteUrl: "https://brain.fm"
+          });
+        } else {
+          await window.BrainFmStorage.set({
+            trackedWebsites: nextWebsites,
+            trackedWebsite: nextWebsites[0].hostname,
+            trackedWebsiteUrl: nextWebsites[0].address
+          });
+        }
+
+        const refreshed = await window.BrainFmStorage.get(["trackedWebsites", "trackedWebsite", "trackedWebsiteUrl"]);
+        setWebsiteDisplay(getTrackedWebsites(refreshed));
+      });
+    });
   }
 
   function setStatus(message, kind = "success") {
@@ -62,8 +123,8 @@
     }
 
     const syncSavedWebsite = async () => {
-      const result = await window.BrainFmStorage.get(["trackedWebsite", "trackedWebsiteUrl"]);
-      setWebsiteDisplay(result.trackedWebsite || "brain.fm", result.trackedWebsiteUrl || "https://brain.fm");
+      const result = await window.BrainFmStorage.get(["trackedWebsites", "trackedWebsite", "trackedWebsiteUrl"]);
+      setWebsiteDisplay(getTrackedWebsites(result));
     };
 
     input.addEventListener("input", () => {
@@ -89,12 +150,21 @@
       saveButton.textContent = "Saving…";
 
       try {
+        const existing = await window.BrainFmStorage.get(["trackedWebsites", "trackedWebsite", "trackedWebsiteUrl"]);
+        const trackedWebsites = getTrackedWebsites(existing);
+        const hasWebsite = trackedWebsites.some((item) => item.hostname === website.hostname);
+
+        const nextWebsites = hasWebsite
+          ? trackedWebsites
+          : [...trackedWebsites, { hostname: website.hostname, address: website.address }];
+
         await window.BrainFmStorage.set({
-          trackedWebsite: website.hostname,
-          trackedWebsiteUrl: website.address
+          trackedWebsites: nextWebsites,
+          trackedWebsite: nextWebsites[0].hostname,
+          trackedWebsiteUrl: nextWebsites[0].address
         });
 
-        setWebsiteDisplay(website.hostname, website.address);
+        setWebsiteDisplay(nextWebsites);
         input.value = website.hostname;
         input.removeAttribute("aria-invalid");
         setStatus(`Saved. Audio playback on ${website.hostname} will now be tracked.`);
@@ -110,7 +180,7 @@
 
     if (typeof chrome !== "undefined" && chrome.storage && chrome.storage.onChanged) {
       chrome.storage.onChanged.addListener((changes, area) => {
-        if (area === "local" && (changes.trackedWebsite || changes.trackedWebsiteUrl)) {
+        if (area === "local" && (changes.trackedWebsites || changes.trackedWebsite || changes.trackedWebsiteUrl)) {
           syncSavedWebsite();
         }
       });

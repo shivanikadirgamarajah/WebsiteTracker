@@ -59,6 +59,21 @@
     const targetHoursInput =
       document.getElementById("target-hours-input");
 
+    const targetResultCard =
+      document.getElementById("target-result-card");
+
+    const targetResultInitial =
+      document.getElementById("target-result-initial");
+
+    const targetResultSolid =
+      document.getElementById("target-result-solid");
+
+    const targetResultWorld =
+      document.getElementById("target-result-world");
+
+    const targetResultCopy =
+      document.getElementById("target-result-copy");
+
     const cancelTargetButton =
       document.getElementById("cancel-target-button");
 
@@ -74,6 +89,10 @@
       !slideText ||
       !targetInputSlide ||
       !targetHoursInput ||
+      !targetResultCard ||
+      !targetResultInitial ||
+      !targetResultSolid ||
+      !targetResultWorld ||
       !cancelTargetButton ||
       !confirmTargetButton
     ) {
@@ -82,18 +101,18 @@
 
     const slides = [
       {
-        title: "Set a weekly goal",
-        text: "Choose how many hours you want to spend on this website each week.",
+        title: "20 Hours - Initial Proficiency",
+        text: "20 hours of focused, active practice can take you from a complete beginner to a basic, working level of competence in many skills.",
         isTargetSlide: false
       },
       {
-        title: "Track your progress",
-        text: "Your dashboard will show how much time you've completed compared with your weekly target.",
+        title: "1,000 Hours - Solid Competence",
+        text: "Reaching a high, skilled level (roughly a 7 out of 10) in most activities typically requires around 1,000 hours of deliberate practice.",
         isTargetSlide: false
       },
       {
-        title: "Build a consistent habit",
-        text: "A weekly goal can help you stay consistent without needing to track your time manually.",
+        title: "10,000 Hours - World-Class Mastery",
+        text: "Roughly 10,000 hours of deliberate practice separates elite, world-class performers from everyone else.",
         isTargetSlide: false
       },
       {
@@ -105,6 +124,37 @@
 
     let currentSlide = 0;
 
+    function formatWeeksOrMonths(weeks) {
+      if (weeks >= 52) {
+        const years = Math.max(1, Math.round(weeks / 52));
+        return `${years} year${years === 1 ? "" : "s"}`;
+      }
+
+      if (weeks > 4) {
+        const months = Math.max(1, Math.round(weeks / 4.333));
+        return `${months} month${months === 1 ? "" : "s"}`;
+      }
+
+      return `${weeks} week${weeks === 1 ? "" : "s"}`;
+    }
+
+    function updateTargetResult() {
+      const selectedHours = Number(targetHoursInput.value);
+      const milestones = [
+        { label: "Initial proficiency", hours: 20, element: targetResultInitial },
+        { label: "Solid competence", hours: 1000, element: targetResultSolid },
+        { label: "World-class mastery", hours: 10000, element: targetResultWorld }
+      ];
+
+      milestones.forEach((milestone) => {
+        const weeks = Math.max(1, Math.ceil(milestone.hours / selectedHours));
+        milestone.element.textContent = formatWeeksOrMonths(weeks);
+      });
+
+      targetInputSlide.classList.add("is-selected");
+      targetResultCard.classList.remove("hidden");
+    }
+
     function updateCarousel() {
       const activeSlide = slides[currentSlide];
       const isTargetSlide = activeSlide.isTargetSlide;
@@ -115,6 +165,8 @@
 
       if (isTargetSlide) {
         slideText.textContent = "Pick the number of hours you want to reach each week.";
+        targetInputSlide.classList.remove("is-selected");
+        targetResultCard.classList.add("hidden");
       }
     }
 
@@ -143,6 +195,10 @@
         slides.length;
 
       updateCarousel();
+    });
+
+    targetHoursInput.addEventListener("change", () => {
+      updateTargetResult();
     });
 
     setTargetButton.addEventListener(
@@ -190,6 +246,7 @@
           String(savedHours);
       }
 
+      updateTargetResult();
       renderTarget(
         result.weeklyTargetHours
       );
