@@ -67,6 +67,8 @@
 
 .target-empty-state button,
 .target-modal-actions button,
+.target-carousel-display,
+.carousel-arrow,
 .target-modal-panel input {
   font: inherit;
 }
@@ -99,7 +101,10 @@
 }
 
 .target-modal-panel {
-  width: min(900px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  width: min(980px, calc(100vw - 36px));
+  min-height: min(78vh, 620px);
   padding: 32px 28px;
   border-radius: 18px;
   background: #fff;
@@ -107,9 +112,16 @@
 }
 
 .target-modal-panel h3 {
-  margin: 0 0 14px;
+  margin: 0 0 8px;
   font-size: 28px;
   letter-spacing: -0.6px;
+}
+
+.target-modal-copy {
+  margin: 0 0 18px;
+  color: #625d79;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .target-modal-panel label {
@@ -128,11 +140,121 @@
   font-size: 18px;
 }
 
+.target-carousel {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 260px;
+  margin: 18px 0 8px;
+  padding: 18px 16px;
+  border: 1px solid #e6dff5;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #faf8ff 0%, #f5f2ff 100%);
+}
+
+.carousel-arrow {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 12px;
+  background: #f1ebfa;
+  color: #4d2d82;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.target-carousel-display {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 220px;
+  padding: 28px 20px;
+
+  text-align: center;
+}
+
+.target-slide-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 520px);
+}
+
+.target-carousel-display h4 {
+  margin: 0 0 10px;
+
+  font-size: 22px;
+  color: #2a2140;
+}
+.target-carousel-display p {
+  max-width: 420px;
+
+  margin: 0;
+
+  color: #655c7a;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.target-carousel-value {
+  display: block;
+  font-size: clamp(40px, 8vw, 72px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1;
+  color: #2a2140;
+}
+.target-input-section {
+  width: min(100%, 460px);
+  margin: 20px auto 0;
+}
+
+.target-input-section label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.target-input-section select {
+  width: 100%;
+  min-height: 52px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #dcd9e8;
+  border-radius: 10px;
+
+  background: white;
+
+  font: inherit;
+  font-size: 16px;
+}
+
+.target-carousel-unit {
+  margin-top: 8px;
+  color: #655c7a;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .target-modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 22px;
+  margin-top: auto;
+  padding-top: 18px;
 }
 
 .target-modal-actions .secondary {

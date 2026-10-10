@@ -6,7 +6,7 @@
   <div id="target-card" class="target-card">
     <div>
       <p class="target-label">Weekly goal</p>
-      <strong id="target-hours-value" class="target-value">10 hours</strong>
+      <strong id="target-hours-value" class="target-value"></strong>
     </div>
     <div class="target-progress">
       <span id="target-progress-label">6 / 10 hrs</span>
@@ -23,13 +23,67 @@
 
 <div id="target-modal" class="target-modal hidden" role="dialog" aria-modal="true" aria-labelledby="target-modal-title">
   <div class="target-modal-panel">
+
     <h3 id="target-modal-title">Set your target</h3>
-    <label for="target-modal-input">How many hours per week?</label>
-    <input id="target-modal-input" type="number" min="1" step="1" placeholder="e.g. 10" required>
+
+    <!-- INFORMATION CAROUSEL -->
+    <div class="target-carousel" aria-label="Target information carousel">
+      <button
+        id="target-carousel-prev"
+        class="carousel-arrow"
+        type="button"
+        aria-label="Previous slide"
+      >
+        ←
+      </button>
+
+      <div class="target-carousel-display" aria-live="polite">
+        <div class="target-slide-copy">
+          <h4 id="target-slide-title">Set a weekly goal</h4>
+
+          <p id="target-slide-text">
+            Choose how many hours you want to spend on this website each week.
+          </p>
+        </div>
+
+        <div class="target-input-section hidden" id="target-input-slide">
+          <label for="target-hours-input">Weekly target</label>
+
+          <select id="target-hours-input">
+            <option value="1">1 hour</option>
+            <option value="2">2 hours</option>
+            <option value="3">3 hours</option>
+            <option value="5">5 hours</option>
+            <option value="8">8 hours</option>
+            <option value="10" selected>10 hours</option>
+            <option value="12">12 hours</option>
+            <option value="15">15 hours</option>
+            <option value="20">20 hours</option>
+            <option value="25">25 hours</option>
+            <option value="30">30 hours</option>
+          </select>
+        </div>
+      </div>
+
+      <button
+        id="target-carousel-next"
+        class="carousel-arrow"
+        type="button"
+        aria-label="Next slide"
+      >
+        →
+      </button>
+    </div>
 
     <div class="target-modal-actions">
-      <button id="cancel-target-button" class="secondary" type="button">Cancel</button>
-      <button id="confirm-target-button" type="button">Save</button>
+      <button id="cancel-target-button" class="secondary" type="button">
+        Cancel
+      </button>
+
+      <button id="confirm-target-button" type="button">
+        Save
+      </button>
     </div>
+
   </div>
 </div>
