@@ -1,0 +1,22 @@
+<form id="website-form">
+  <label for="website-input">Website to track</label>
+  <div class="search-bar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <circle cx="10.5" cy="10.5" r="6.5" />
+      <path d="m16 16 4 4" stroke-linecap="round" />
+    </svg>
+    <input id="website-input" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" placeholder="Enter a website, e.g. brain.fm" maxlength="2048" aria-describedby="website-hint website-status" required>
+    <button id="save-website" type="submit">Save website</button>
+  </div>
+  <p id="website-hint" class="hint">Enter a domain or paste a full link. Your choice is saved on this device.</p>
+  <p id="website-status" class="status" role="status" aria-live="polite"></p>
+</form>
+
+<div class="selection">
+  <div>
+    <p class="selection-label">Selected website</p>
+    <strong id="current-website">brain.fm</strong>
+  </div>
+  <a id="open-website" href="https://brain.fm" target="_blank" rel="noopener noreferrer">Open website <span aria-hidden="true">↗</span></a>
+</div>
+<p class="note">Open your selected website and play audio to start tracking. View your total listening time in the extension popup.</p>

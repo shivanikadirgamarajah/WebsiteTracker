@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Target Hours</title>
+  <link rel="stylesheet" href="target.css">
+  <script src="target.js" defer></script>
+</head>
+<body>
+  <main>
+    <div class="brand">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      Website Time Tracker
+    </div>
+
+    <h1>Target hours</h1>
+    <p class="intro">Set a weekly listening goal and keep your audio time on track.</p>
+
+    <section id="target-card" class="target-card" aria-labelledby="target-hours-title">
+      <div>
+        <p class="target-label">Weekly goal</p>
+        <strong id="target-hours-title" class="target-value">10 hours</strong>
+      </div>
+
+      <div class="target-progress">
+        <span id="target-progress-label">6 / 10 hrs</span>
+        <div class="progress-bar" aria-hidden="true">
+          <span class="progress-fill"></span>
+        </div>
+      </div>
+    </section>
+
+    <div id="target-empty-state" class="target-empty-state">
+      <button id="set-target-button" type="button">Set target</button>
+    </div>
+
+    <form id="target-form" class="target-form hidden" aria-label="Set your weekly target">
+      <label for="target-hours-input">How many hours per week?</label>
+      <div class="target-input-row">
+        <input id="target-hours-input" type="number" min="1" step="1" placeholder="e.g. 10" required>
+        <button type="submit">Save</button>
+      </div>
+    </form>
+
+    <nav class="page-nav" aria-label="Page navigation">
+      <a href="page.html">Choose website</a>
+    </nav>
+  </main>
+</body>
+</html>

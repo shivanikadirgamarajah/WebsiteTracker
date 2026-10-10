@@ -1,0 +1,158 @@
+.target-hours {
+  margin-top: 28px;
+}
+
+.section-heading {
+  margin-bottom: 14px;
+}
+
+.target-hours h2 {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 32px);
+  letter-spacing: -0.8px;
+}
+
+.target-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 20px;
+  border: 1px solid #ece9f5;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #faf8ff 0%, #f5f2ff 100%);
+}
+
+.target-label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #656477;
+}
+
+.target-value {
+  display: block;
+  font-size: 28px;
+  letter-spacing: -0.8px;
+  color: #25243b;
+}
+
+.target-progress {
+  min-width: 180px;
+  text-align: right;
+  color: #4a3d6c;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8e2f7;
+}
+
+.progress-fill {
+  display: block;
+  width: 60%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7041c8 0%, #9a73ef 100%);
+}
+
+.target-empty-state {
+  margin-top: 20px;
+}
+
+.target-empty-state button,
+.target-modal-actions button,
+.target-modal-panel input {
+  font: inherit;
+}
+
+.target-empty-state button,
+.target-modal-actions button {
+  min-height: 46px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #7041c8;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.target-empty-state button:hover,
+.target-modal-actions button:hover {
+  background: #5d32ae;
+}
+
+.target-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(27, 23, 39, 0.45);
+  z-index: 20;
+}
+
+.target-modal-panel {
+  width: min(900px, calc(100vw - 32px));
+  padding: 32px 28px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 20px 40px rgba(30, 20, 60, 0.14);
+}
+
+.target-modal-panel h3 {
+  margin: 0 0 14px;
+  font-size: 28px;
+  letter-spacing: -0.6px;
+}
+
+.target-modal-panel label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.target-modal-panel input {
+  width: 100%;
+  min-height: 54px;
+  padding: 12px 14px;
+  border: 1px solid #dcd9e8;
+  border-radius: 12px;
+  font-size: 18px;
+}
+
+.target-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.target-modal-actions .secondary {
+  background: #f1eef8;
+  color: #25243b;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 520px) {
+  .target-card {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .target-progress {
+    width: 100%;
+    text-align: left;
+  }
+}

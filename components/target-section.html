@@ -1,0 +1,35 @@
+<section class="target-hours" aria-labelledby="target-hours-title">
+  <div class="section-heading">
+    <h2 id="target-hours-title">Target hours</h2>
+  </div>
+
+  <div id="target-card" class="target-card">
+    <div>
+      <p class="target-label">Weekly goal</p>
+      <strong id="target-hours-value" class="target-value">10 hours</strong>
+    </div>
+    <div class="target-progress">
+      <span id="target-progress-label">6 / 10 hrs</span>
+      <div class="progress-bar" aria-hidden="true">
+        <span class="progress-fill"></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="target-empty-state" class="target-empty-state">
+    <button id="set-target-button" type="button">Set target</button>
+  </div>
+</section>
+
+<div id="target-modal" class="target-modal hidden" role="dialog" aria-modal="true" aria-labelledby="target-modal-title">
+  <div class="target-modal-panel">
+    <h3 id="target-modal-title">Set your target</h3>
+    <label for="target-modal-input">How many hours per week?</label>
+    <input id="target-modal-input" type="number" min="1" step="1" placeholder="e.g. 10" required>
+
+    <div class="target-modal-actions">
+      <button id="cancel-target-button" class="secondary" type="button">Cancel</button>
+      <button id="confirm-target-button" type="button">Save</button>
+    </div>
+  </div>
+</div>

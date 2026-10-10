@@ -1,41 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Brain.fm Tracker</title>
-
-  <style>
-    body {
-      width: 250px;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 18px;
-    }
-
-    #time {
-      font-size: 32px;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Time Tracker</title>
+  <link rel="stylesheet" href="popup.css">
+  <script src="js/storage.js" defer></script>
+  <script src="popup.js" defer></script>
 </head>
-
 <body>
+  <header class="brand">
+    <span class="brand-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+    <div>
+      <h1>Website Time Tracker</h1>
+      <p>Make your listening time count.</p>
+    </div>
+  </header>
 
-  <h1>Brain.fm Focus Time</h1>
+  <main>
+    <section class="time-card" aria-labelledby="time-label">
+      <div class="card-heading">
+        <h2 id="time-label" class="eyebrow">Total listening time</h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M4 14v-3a8 8 0 0 1 16 0v3" stroke-linecap="round" />
+          <rect x="3" y="12" width="4" height="8" rx="2" />
+          <rect x="17" y="12" width="4" height="8" rx="2" />
+        </svg>
+      </div>
+      <output id="time" aria-labelledby="time-label">0h 0m</output>
+      <p class="time-caption">A little more focus, every day.</p>
+    </section>
 
-  <div id="time">
-    0m
-  </div>
+    <div class="website-row">
+      <span class="website-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+          <circle cx="12" cy="12" r="8.5" />
+          <ellipse cx="12" cy="12" rx="3.5" ry="8.5" />
+          <path d="M3.5 12h17" />
+        </svg>
+      </span>
+      <div class="website-details">
+        <p class="website-label">Selected website</p>
+        <strong id="website">brain.fm</strong>
+      </div>
+    </div>
 
-  <p>
-    <a href="page.html" target="_blank" rel="noopener noreferrer">Open Tracker Page</a>
-  </p>
-
-  <script src="popup.js"></script>
-
+    <a class="open-tracker" href="page.html" target="_blank" rel="noopener noreferrer">
+      Open tracker page
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+        <path d="M7 17 17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </a>
+    <p class="hint">Play audio on your selected website to start tracking.</p>
+  </main>
 </body>
 </html>

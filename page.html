@@ -4,40 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Website Time Tracker</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: #f5f7fb;
-      color: #1f2937;
-      font-family: Arial, sans-serif;
-    }
-
-    main {
-      width: min(600px, calc(100% - 40px));
-      padding: 40px;
-      border-radius: 12px;
-      background: white;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-      text-align: center;
-    }
-
-    h1 {
-      margin-top: 0;
-    }
-
-    p {
-      line-height: 1.6;
-    }
-  </style>
+  <link rel="stylesheet" href="page.css">
+  <link rel="stylesheet" href="styles/website-selector.css">
+  <link rel="stylesheet" href="styles/target-section.css">
+  <script src="js/storage.js" defer></script>
+  <script src="js/website-selector.js" defer></script>
+  <script src="js/target-section.js" defer></script>
+  <script src="page.js" defer></script>
 </head>
 <body>
   <main>
-    <h1>Website Time Tracker</h1>
-    <p>Your extension tracks time spent listening to Brain.fm and stores the total session time locally.</p>
-    <p>This page is part of the extension and can be opened from the popup.</p>
+    <div class="brand">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="12" r="8.5" />
+          <path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      Website Time Tracker
+    </div>
+
+    <h1>Choose your website.</h1>
+    <p class="intro">Make your listening time count. Enter a website below to track how long it plays audio.</p>
+
+    <div id="website-selector-root"></div>
+    <div id="target-section-root"></div>
   </main>
 </body>
 </html>
